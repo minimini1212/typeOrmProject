@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -9,7 +9,9 @@ export class UserController {
   @Get('me')
   @UseGuards(AuthGuard())
   async getMyInfo(@Req() req) {
-    return req.user;
+    return {
+      nickname: req.user.name,
+      point: req.user.point,
+    }
   }
-
 }

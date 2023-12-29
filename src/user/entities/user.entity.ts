@@ -1,4 +1,4 @@
-import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
+import { IsEmail, IsInt, IsNumber, IsString, IsStrongPassword } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -30,6 +30,10 @@ export class User {
   @IsStrongPassword()
   @Column('varchar', { select: false, nullable: false })
   password: string;
+
+  @IsInt()
+  @Column('bigint', { default: 1000000 })
+  point: number;
 
   @CreateDateColumn()
   createAt: Date;

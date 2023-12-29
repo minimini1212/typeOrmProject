@@ -5,7 +5,10 @@ import { UserModule } from './user/user.module';
 import { ConcertModule } from './concert/concert.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import {
+  TypeOrmModuleAsyncOptions,
+  TypeOrmModuleOptions,
+} from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Concert } from './concert/entities/concert.entity';
@@ -30,10 +33,10 @@ const typeOrmModuleOptions: TypeOrmModuleAsyncOptions = {
 
 @Module({
   imports: [
-    UserModule, 
+    UserModule,
     AuthModule,
     // configmodule을 전역으로 사용가능하게 하겠다. isglobal
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     ConcertModule,
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
   ],

@@ -36,6 +36,7 @@ export class AuthService {
       },
     });
 
+
     if (_.isNil(user)) {
       throw new NotFoundException('존재하지 않는 유저입니다.');
     }
@@ -46,7 +47,7 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
 
-    const payload = { id: user.id };
+    const payload = { email: user.email };
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;
   }

@@ -1,34 +1,45 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConcertService } from './concert.service';
 import { CreateConcertDto } from './dto/create-concert.dto';
 import { UpdateConcertDto } from './dto/update-concert.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/user/types/userRole.type';
 
 @Controller('concert')
 export class ConcertController {
   constructor(private readonly concertService: ConcertService) {}
 
   @Post()
-  createConcert(@Body() createConcertDto: CreateConcertDto) {
-    return this.concertService.create(createConcertDto);
+  @UseGuards(AuthGuard())
+  async createConcert(@Body() createConcertDto: CreateConcertDto, @Req() req) {
+    const user = req.user;
+
+    if (user.role !== Role.Admin) {
+      throw new UnauthorizedException('관리자만 공연 등록이 가능합니다.');
+    }
+
+    return await this.concertService.create(createConcertDto);
   }
 
   @Get()
-  findAll() {
-    return this.concertService.findAll();
+  async findAllConcert() {
+    return await this.concertService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.concertService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConcertDto: UpdateConcertDto) {
-    return this.concertService.update(+id, updateConcertDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.concertService.remove(+id);
+  async findOneConcert(@Param('id') id: number) {
+    return await this.concertService.findOne(id);
   }
 }
+

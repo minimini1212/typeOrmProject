@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -17,19 +17,27 @@ export class Concert {
 
   @IsString()
   @Column('varchar', { length: 20, nullable: false })
-  concert_name: string;
+  name: string;
+
+  @IsDate()
+  @Column('varchar', { length: 20, nullable: false })
+  date: Date;
 
   @IsString()
   @Column('varchar', { length: 20, nullable: false })
-  concert_time: string;
+  time: string;
 
   @IsString()
   @Column('varchar', { length: 20, nullable: false })
-  concert_place: string;
+  place: string;
 
   @IsNumber()
   @Column({ nullable: false })
-  concert_price: number;
+  price: number;
+
+  @IsNumber()
+  @Column({ nullable: false })
+  seat: number;
 
   @CreateDateColumn()
   createAt: Date;
