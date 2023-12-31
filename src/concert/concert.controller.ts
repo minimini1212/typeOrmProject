@@ -3,16 +3,14 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UseGuards,
   Req,
   UnauthorizedException,
+  Query,
 } from '@nestjs/common';
 import { ConcertService } from './concert.service';
 import { CreateConcertDto } from './dto/create-concert.dto';
-import { UpdateConcertDto } from './dto/update-concert.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/user/types/userRole.type';
 
@@ -37,9 +35,14 @@ export class ConcertController {
     return await this.concertService.findAll();
   }
 
+  @Get('keyword')
+  async findOneConcertBykeyword(@Query('keyword') keyword: string) {
+    console.log(keyword);
+    return await this.concertService.findKeyword(keyword);
+  }
+
   @Get(':id')
   async findOneConcert(@Param('id') id: number) {
     return await this.concertService.findOne(id);
   }
 }
-

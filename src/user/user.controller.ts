@@ -11,6 +11,7 @@ export class UserController {
   async getMyInfo(@Req() req) {
     return {
       nickname: req.user.name,
+      role: req.user.role,
       point: req.user.point,
     }
   }

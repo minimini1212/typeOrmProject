@@ -12,6 +12,9 @@ import {
 import { User } from './user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Concert } from './concert/entities/concert.entity';
+import { ReservationModule } from './reservation/reservation.module';
+import { Reservation } from './reservation/entities/reservation.entity';
+import { Schedule } from './concert/entities/schedule.entity';
 
 const typeOrmModuleOptions: TypeOrmModuleAsyncOptions = {
   useFactory: async (
@@ -23,7 +26,8 @@ const typeOrmModuleOptions: TypeOrmModuleAsyncOptions = {
     username: configService.get('DB_USERNAME'),
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_NAME'),
-    entities: [Concert, User],
+    // autoLoadEntities: true,
+    entities: [Concert, User, Reservation, Schedule],
     synchronize: configService.get('DB_SYNC'),
     logging: true,
   }),
@@ -39,6 +43,7 @@ const typeOrmModuleOptions: TypeOrmModuleAsyncOptions = {
     ConfigModule.forRoot({ isGlobal: true }),
     ConcertModule,
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
+    ReservationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

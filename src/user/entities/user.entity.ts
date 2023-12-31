@@ -1,12 +1,21 @@
-import { IsEmail, IsInt, IsNumber, IsString, IsStrongPassword } from 'class-validator';
+import {
+  IsEmail,
+  IsInt,
+  IsNumber,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Concert } from 'src/concert/entities/concert.entity';
+import { Reservation } from 'src/reservation/entities/reservation.entity';
 
 @Entity({
   name: 'users',
@@ -43,4 +52,11 @@ export class User {
 
   @DeleteDateColumn()
   deleteAt: Date;
+
+  // schedule과 연결해라
+  @OneToMany((type) => Concert, (concert) => concert.user)
+  concerts: Concert[];
+
+  @OneToMany((type) => Reservation, (reservation) => reservation.user)
+  reservations: Reservation[];
 }

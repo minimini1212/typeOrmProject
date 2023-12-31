@@ -4,9 +4,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Schedule } from './schedule.entity';
 
 @Entity({
   name: 'concerts',
@@ -19,14 +24,6 @@ export class Concert {
   @Column('varchar', { length: 20, nullable: false })
   name: string;
 
-  @IsDate()
-  @Column('varchar', { length: 20, nullable: false })
-  date: Date;
-
-  @IsString()
-  @Column('varchar', { length: 20, nullable: false })
-  time: string;
-
   @IsString()
   @Column('varchar', { length: 20, nullable: false })
   place: string;
@@ -35,9 +32,20 @@ export class Concert {
   @Column({ nullable: false })
   price: number;
 
+
+  // schedule테이블로 관리
   @IsNumber()
   @Column({ nullable: false })
   seat: number;
+
+  @IsString()
+  category: string;
+
+  @IsString()
+  introduction: string;
+
+  @IsString()
+  image: string;
 
   @CreateDateColumn()
   createAt: Date;
@@ -47,4 +55,13 @@ export class Concert {
 
   @DeleteDateColumn()
   deleteAt: Date;
+
+  @ManyToOne((type) => User, (user) => user.concerts)
+  @JoinColumn()
+  user: User;
+
+  @OneToMany((type) => Schedule, (schedule) => schedule.concert, {
+    cascade: true,
+  })
+  schedules: Schedule[];
 }
