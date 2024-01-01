@@ -15,7 +15,7 @@ export class ConcertService {
 
   // 공연 생성하기
   async create(createConcertDto: CreateConcertDto) {
-    const { name, dateTimes, place, price, seat, category, introduction } =
+    const { name, dateTimes, place, image,price, seat, category, introduction } =
       createConcertDto;
 
     const foundConcert = await this.concertRepository.findOne({
@@ -35,9 +35,10 @@ export class ConcertService {
     const createConcert = await this.concertRepository.save({
       name,
       place,
-      schedules,
       price,
+      schedules,
       seat,
+      image,
       category,
       introduction,
     });
@@ -54,6 +55,9 @@ export class ConcertService {
   async findOne(id: number) {
     return await this.concertRepository.findOne({
       where: { id },
+      relations: {
+        schedules: true,
+      }
     });
   }
 

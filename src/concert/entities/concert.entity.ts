@@ -39,12 +39,15 @@ export class Concert {
   seat: number;
 
   @IsString()
+  @Column({ nullable: false })
   category: string;
 
   @IsString()
+  @Column({ nullable: false })
   introduction: string;
 
   @IsString()
+  @Column({ nullable: false })
   image: string;
 
   @CreateDateColumn()

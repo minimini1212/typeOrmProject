@@ -1,5 +1,4 @@
 import { IsArray, IsDate, IsDateString, IsNotEmpty, IsNumber, IsString, IsStrongPassword } from 'class-validator';
-import { array } from 'joi';
 
 export class CreateConcertDto {
   @IsNotEmpty({ message: '입력란을 확인하세요' })
