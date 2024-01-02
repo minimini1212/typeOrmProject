@@ -1,4 +1,4 @@
-import { IsDateString, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsString } from 'class-validator';
 import {
   Column,
   Entity,
@@ -18,6 +18,15 @@ export class Schedule {
   //@Column({ type: 'datetime' })
   @Column()
   dateTime: Date;
+
+  // schedule테이블로 관리
+  @IsNumber()
+  @Column({ nullable: false })
+  seat: number;
+
+  @IsNumber()
+  @Column({ nullable: false })
+  availableSeat: number;
 
   @ManyToOne((type) => Concert, (concert) => concert.schedules)
   concert: Concert;

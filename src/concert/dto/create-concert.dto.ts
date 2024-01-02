@@ -18,8 +18,12 @@ export class CreateConcertDto {
   price: number;
 
   @IsNotEmpty({ message: '입력란을 확인하세요' })
-  @IsNumber()
-  seat: number;
+  @IsNumber({}, { each: true })
+  seats: number[];
+
+  @IsNotEmpty({ message: '입력란을 확인하세요' })
+  @IsNumber({}, { each: true })
+  availableSeats: number[];
 
   @IsNotEmpty({ message: '입력란을 확인하세요' })
   @IsString()

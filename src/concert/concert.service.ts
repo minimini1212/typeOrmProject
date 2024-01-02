@@ -14,9 +14,21 @@ export class ConcertService {
   ) {}
 
   // 공연 생성하기
-  async create(createConcertDto: CreateConcertDto) {
-    const { name, dateTimes, place, image,price, seat, category, introduction } =
-      createConcertDto;
+  async create(createConcertDto: CreateConcertDto, user) {
+    const {
+      name,
+      dateTimes,
+      place,
+      image,
+      price,
+      seats,
+      availableSeats,
+      category,
+      introduction,
+    } = createConcertDto;
+
+    const userId = user.id;
+    console.log(userId);
 
     const foundConcert = await this.concertRepository.findOne({
       where: { name },
@@ -26,18 +38,40 @@ export class ConcertService {
       throw new ConflictException('이미 존재하는 공연 이름입니다.');
     }
 
-    const schedules = dateTimes.map((dateTime) => {
+    // [{dateTime: 시간1}, {dateTime: 시간2}] -=> schedules
+    const mkDateTime = dateTimes.map((dateTime) => {
       return { dateTime };
     });
 
-    // [{dateTime: 시간1}, {dateTime: 시간2}] -=> schedules
+    // 좌석수는 배열로 등록
+    const mkSeat = seats.map((seat) => {
+      return { seat };
+    });
+
+    // datetime과 seat 합쳐서 만들기
+    const dateTimeAndSeat = mkDateTime.map((datetime, index) => ({
+      ...datetime,
+      ...mkSeat[index],
+    }));
+
+    // 이용가능 좌석 만들기
+    const mkAvailableSeat = availableSeats.map((availableSeat) => {
+      return { availableSeat }
+    })
+
+    const schedules = dateTimeAndSeat.map((datetimeSeat, index) => ({
+      ...datetimeSeat,
+      ...mkAvailableSeat[index],
+    }))
+
+
 
     const createConcert = await this.concertRepository.save({
       name,
       place,
       price,
       schedules,
-      seat,
+      user: userId,
       image,
       category,
       introduction,
@@ -57,7 +91,7 @@ export class ConcertService {
       where: { id },
       relations: {
         schedules: true,
-      }
+      },
     });
   }
 

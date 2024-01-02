@@ -32,12 +32,6 @@ export class Concert {
   @Column({ nullable: false })
   price: number;
 
-
-  // schedule테이블로 관리
-  @IsNumber()
-  @Column({ nullable: false })
-  seat: number;
-
   @IsString()
   @Column({ nullable: false })
   category: string;

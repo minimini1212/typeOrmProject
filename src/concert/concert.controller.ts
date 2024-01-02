@@ -27,7 +27,7 @@ export class ConcertController {
       throw new UnauthorizedException('관리자만 공연 등록이 가능합니다.');
     }
 
-    return await this.concertService.create(createConcertDto);
+    return await this.concertService.create(createConcertDto, user);
   }
 
   @Get()

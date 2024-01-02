@@ -26,4 +26,7 @@ export class Reservation {
   @ManyToOne((Type) => Schedule, (schedule) => schedule.reservations)
   @JoinColumn()
   schedule: Schedule;
+
+  @Column()
+  scheduleId: number;
 }
