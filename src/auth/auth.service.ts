@@ -12,12 +12,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { hashSync, compareSync } from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+import { Role } from 'src/user/types/userRole.type';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   // 로그인
@@ -35,7 +38,6 @@ export class AuthService {
         password: true,
       },
     });
-
 
     if (_.isNil(user)) {
       throw new NotFoundException('존재하지 않는 유저입니다.');
@@ -67,8 +69,22 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호를 확인해주세요');
     }
 
-    const salt = 12;
+    const salt = +this.configService.get('SALT_KEY');
     const hashPassword = hashSync(password, salt);
+
+
+    // role이 admin이면 point를 0으로 할당하기
+    if (role === Role.Admin) {
+      const point = 0;
+
+      return await this.userRepository.save({
+        email,
+        name,
+        role,
+        point,
+        password: hashPassword,
+      });
+    }
 
     const createdUser = await this.userRepository.save({
       email,

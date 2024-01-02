@@ -53,7 +53,6 @@ export class User {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  // schedule과 연결해라
   @OneToMany((type) => Concert, (concert) => concert.user)
   concerts: Concert[];
 

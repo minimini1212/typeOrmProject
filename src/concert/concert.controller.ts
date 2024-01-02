@@ -37,7 +37,6 @@ export class ConcertController {
 
   @Get('keyword')
   async findOneConcertBykeyword(@Query('keyword') keyword: string) {
-    console.log(keyword);
     return await this.concertService.findKeyword(keyword);
   }
 
